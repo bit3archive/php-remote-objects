@@ -15,7 +15,7 @@ abstract class AbstractInvokationTestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return Server
 	 */
-	protected abstract function shutdownServer(Server $server);
+	protected abstract function shutdownServer($server);
 
 	/**
 	 * @return Client
@@ -25,7 +25,7 @@ abstract class AbstractInvokationTestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return Client
 	 */
-	protected abstract function shutdownClient(Client $client);
+	protected abstract function shutdownClient($client);
 
 	/**
 	 * @covers \RemoteObjects\Client::invoke
@@ -33,35 +33,20 @@ abstract class AbstractInvokationTestCase extends \PHPUnit_Framework_TestCase
 	 */
 	public function testInvoke()
 	{
-		$pid = pcntl_fork();
+		try {
+			$server = $this->spawnServer();
+			$client = $this->spawnClient();
 
-		if ($pid == -1) {
-			throw new \Exception('Forking unsupported');
+			$result = $client->invoke('reply', 'Hello World!');
+			$this->assertEquals('Hello World!', $result);
+
+			$this->shutdownClient($client);
+			$this->shutdownServer($server);
 		}
-		else if ($pid) {
-			try {
-				$client = $this->spawnClient();
-
-				$result = $client->invoke('reply', 'Hello World!');
-				$this->assertEquals('Hello World!', $result);
-
-				$this->shutdownClient($client);
-			}
-			catch(\Exception $e) {
-				$this->shutdownClient($client);
-				throw $e;
-			}
-		}
-		else {
-			try {
-				$server = $this->spawnServer();
-				$server->handle();
-				$this->shutdownServer($server);
-			}
-			catch(\Exception $e) {
-				$this->shutdownServer($server);
-				throw $e;
-			}
+		catch(\Exception $e) {
+			$this->shutdownClient($client);
+			$this->shutdownServer($server);
+			throw $e;
 		}
 	}
 
@@ -71,35 +56,53 @@ abstract class AbstractInvokationTestCase extends \PHPUnit_Framework_TestCase
 	 */
 	public function testInvalidMethod()
 	{
-		$pid = pcntl_fork();
+		try {
+			$server = $this->spawnServer();
+			$this->setExpectedException('Exception', 'Method not found', -32601);
 
-		if ($pid == -1) {
-			throw new \Exception('Forking unsupported');
+			$client = $this->spawnClient();
+
+			$client->invoke('unknownMethod');
+			$this->shutdownClient($client);
+			$this->shutdownServer($server);
 		}
-		else if ($pid) {
-			try {
-				$this->setExpectedException('Exception', 'Method not found', -32601);
-
-				$client = $this->spawnClient();
-
-				$client->invoke('unknownMethod');
-				$this->shutdownClient($client);
-			}
-			catch(\Exception $e) {
-				$this->shutdownClient($client);
-				throw $e;
-			}
+		catch(\Exception $e) {
+			$this->shutdownClient($client);
+			$this->shutdownServer($server);
+			throw $e;
 		}
-		else {
-			try {
-				$server = $this->spawnServer();
-				$server->handle();
-				$this->shutdownServer($server);
-			}
-			catch(\Exception $e) {
-				$this->shutdownServer($server);
-				throw $e;
-			}
+	}
+
+	/**
+	 * @covers \RemoteObjects\Client::castAsRemoteObject
+	 */
+	public function testClientCast()
+	{
+		try {
+			$server = $this->spawnServer();
+			$client = $this->spawnClient();
+
+			/** @var EchoInterface $echo */
+			$echo = $client->castAsRemoteObject('RemoteObjects\Test\EchoInterface');
+
+			$this->assertTrue(
+				$echo instanceof \RemoteObjects\RemoteObject
+			);
+			$this->assertTrue(
+				$echo instanceof EchoInterface
+			);
+			$this->assertEquals(
+				'Hello World!',
+				$echo->reply('Hello World!')
+			);
+
+			$this->shutdownClient($client);
+			$this->shutdownServer($server);
+		}
+		catch(\Exception $e) {
+			$this->shutdownClient($client);
+			$this->shutdownServer($server);
+			throw $e;
 		}
 	}
 }

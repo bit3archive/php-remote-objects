@@ -4,10 +4,10 @@ namespace RemoteObjects\Test;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Symfony\Component\Process\Process;
 use RemoteObjects\Server;
 use RemoteObjects\Client;
 use RemoteObjects\Encode\JsonRpc20Encoder;
-use RemoteObjects\Transport\UnixSocketServer;
 use RemoteObjects\Transport\UnixSocketClient;
 
 class UnixSocketTest extends AbstractInvokationTestCase
@@ -21,6 +21,8 @@ class UnixSocketTest extends AbstractInvokationTestCase
 	 * @var string
 	 */
 	protected $clientSocket = null;
+
+	protected $server = null;
 
 	protected function setUp()
 	{
@@ -36,31 +38,21 @@ class UnixSocketTest extends AbstractInvokationTestCase
 	 */
 	protected function spawnServer()
 	{
-		$logger = new Logger('phpunit');
-		$logger->pushHandler(new StreamHandler('php://stderr'));
-
-		$transport = new UnixSocketServer($this->serverSocket);
-		$transport->setLogger($logger);
-
-		$encoder = new JsonRpc20Encoder();
-		$encoder->setLogger($logger);
-
-		$server = new Server(
-			$transport,
-			$encoder,
-			new EchoObject()
+		$server = new Process(
+			'php ' . escapeshellarg(__DIR__ . '/UnixSocketEchoServer.php') . ' ' . escapeshellarg($this->serverSocket),
+			__DIR__
 		);
-		$server->setLogger($logger);
-
+		$server->setTimeout(15);
+		$server->start();
 		return $server;
 	}
 
 	/**
 	 * @return Server
 	 */
-	protected function shutdownServer(Server $server)
+	protected function shutdownServer($server)
 	{
-		$server->getTransport()->close();
+		$server->wait();
 	}
 
 	/**
@@ -91,7 +83,7 @@ class UnixSocketTest extends AbstractInvokationTestCase
 	/**
 	 * @return Client
 	 */
-	protected function shutdownClient(Client $client)
+	protected function shutdownClient($client)
 	{
 		$client->getTransport()->close();
 	}

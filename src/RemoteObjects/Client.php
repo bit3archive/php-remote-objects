@@ -2,6 +2,9 @@
 
 namespace RemoteObjects;
 
+use RemoteObjects\Proxy\RemoteObjectProxy;
+use RemoteObjects\Proxy\RemoteObjectProxyGenerator;
+
 class Client
 {
 	/**
@@ -84,6 +87,36 @@ class Client
 	public function getEncoder()
 	{
 		return $this->encoder;
+	}
+
+	/**
+	 * Cast the client directly into an object object.
+	 *
+	 * @param string|null $interface
+	 *
+	 * @return RemoteObject
+	 */
+	public function castAsRemoteObject($interface = null)
+	{
+		return $this->getRemoteObject(null, $interface);
+	}
+
+	/**
+	 * Get a named remote object proxy.
+	 *
+	 * @param string $key
+	 * @param string|null $interface
+	 *
+	 * @return RemoteObject
+	 */
+	public function getRemoteObject($key, $interface = null)
+	{
+		if ($interface) {
+			return RemoteObjectProxyGenerator::generate($this, $interface, $key);
+		}
+		else {
+			return new RemoteObjectProxy($this, $key);
+		}
 	}
 
 	/**

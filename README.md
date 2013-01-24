@@ -105,6 +105,157 @@ $result = $server->invoke('reply', 'Tristan');
 echo $result; // -> "Hello Tristan"
 ```
 
+Chaining and deep structure
+---------------------------
+
+Inspired from another JSON-RPC library, RemoteObjects allow complex structures on the server side.
+Sometimes you need a complex remote api, but you won't to overload your remote object class.
+Instead of creating multiple endpoints, it's possible to create multiple "named" remote objects.
+
+Creating named objects is realy easy:
+
+```php
+$server = new RemoteObjects\Server(
+	$transport,
+	$encoder,
+	array(
+		'a' => $targetA,
+		'b' => $targetB
+	)
+);
+```
+
+To call methods from `$targetA` or `$targetB` you just have to prefix the method name with the object name, concatenated with a dot.
+
+```php
+$client->invoke('a.methodA'); // invoke $targetA->methodA();
+$client->invoke('b.methodB'); // invoke $targetB->methodB();
+```
+
+It is also possible to make bigger, more complex and multidimensional structures.
+
+```php
+$server = new RemoteObjects\Server(
+	$transport,
+	$encoder,
+	array(
+		'a' => array(
+			'one' => $targetOne,
+			'two' => array(
+				'I' => $targetI,
+				'II' => $targetII
+			)
+		),
+		'b' => $targetB
+	)
+);
+```
+
+To call `$targetII->method()` for example, the method name will be `a.two.II.method`.
+
+Hint: You can also use `ArrayAccess` compatible objects, instead of arrays!
+
+Lazy objects
+------------
+
+In the last chapter, you read about chaining and deep structures.
+But if your API grows up, creating all target objects may waste a lot of resources.
+Instead of using arrays or `ArrayAccess` objects, you can make a class with getters for the named objects.
+
+```php
+class Objects
+{
+	public function getA()
+	{
+		return new TargetA();
+	}
+
+	public function getB()
+	{
+		return new TargetB();
+	}
+}
+```
+
+And then use this object as target.
+
+```php
+
+$server = new RemoteObjects\Server(
+	$transport,
+	$encoder,
+	new Objects()
+);
+```
+
+To access methods from `TargetA` or `TargetB` it is the same as before,
+use `a.methodName` to invoke `TargetA::methodName` or `b.methodName` to invoke `TargetB::methodName`.
+
+Remote object accessors
+-----------------------
+
+RemoteObjects allow to create `RemoteObject` objects to directly call the methods on it.
+
+On the server side:
+
+```php
+$server = new RemoteObjects\Server(
+	$transport,
+	$encoder,
+	array(
+		'a' => $targetA,
+		'b' => $targetB
+	)
+);
+```
+
+On the client side:
+
+```php
+$remoteA = $client->getRemoteObject('a');
+$remoteB = $client->getRemoteObject('b');
+```
+
+Now `$remoteA` is an accessor to `$targetA` and `$remoteB` to `$targetB`.
+Keep in mind that `$remoteA` and `$remoteB` are just proxies without any methods.
+Every method is dynamically passed to the server side.
+
+If you don't have named objects on the server side, you can also pack the complete client object as `RemoteObject`.
+
+```php
+$remote = $client->castAsRemoteObject();
+```
+
+Now every call `$remote->method($arg1, $arg2, ...)` will directly passed to `$client->invokeArgs('method', [$arg1, $arg2, ...])`.
+
+Interface mapping
+-----------------
+
+One big problem of remote method invocation, and the previous shown method is the nescience of the remote methods.
+Every object you get with `Client::getRemoteObject` or `Client::castAsRemoteObject` is just a primitive proxy, without any methods.
+You are unable to use `method_exists` or `ReflectionClass` to "inspect" the object and its methods.
+
+To solve this problem, RemoteObjects allow you to specify an interface, to use as `RemoteObject`.
+Just specify your interface, when calling `Client::getRemoteObject` or `Client::castAsRemoteObject`.
+
+```php
+interface MyRemote
+{
+	public function remoteMethod();
+}
+
+$remote = $client->castAsRemoteObject('MyRemote');
+```
+
+The object `$remote` **is** an instance of `MyRemote`, but it is also an instance of `RemoteObjects\RemoteObject`.
+
+How this works?
+Internally a virtual temporary proxy class is generated, named `MyRemoteProxy` (just 'Proxy' is prefixed) that implements the interface.
+This method only works with interfaces.
+
+With this technique you can make nearly every object remote and pass the object to other methods without type hint mismatch.
+All you need is an interface.
+
 Security
 --------
 
