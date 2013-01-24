@@ -94,7 +94,7 @@ class JsonRpc20Encoder implements Encoder
 			throw new \Exception(
 				'Parse error',
 				-32700,
-				\Exception(
+				new \Exception(
 					'Decode json failed',
 					json_last_error()
 				)
