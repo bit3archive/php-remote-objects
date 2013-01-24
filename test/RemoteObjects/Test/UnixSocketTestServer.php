@@ -10,12 +10,12 @@ use RemoteObjects\Server;
 use RemoteObjects\Encode\JsonRpc20Encoder;
 use RemoteObjects\Transport\UnixSocketServer;
 
-class EchoServer
+class UnixSocketTestServer
 {
-	public function run($socketPath)
+	public function run($socketPath, $target)
 	{
-		$logger = new Logger('phpunit');
-		$logger->pushHandler(new StreamHandler('php://stderr'));
+		$logger = new Logger('server');
+		$logger->pushHandler(new StreamHandler(sys_get_temp_dir() . '/phpunit.log'));
 
 		$transport = new UnixSocketServer($socketPath);
 		$transport->setLogger($logger);
@@ -26,7 +26,7 @@ class EchoServer
 		$server = new Server(
 			$transport,
 			$encoder,
-			new EchoObject()
+			$target
 		);
 		$server->setLogger($logger);
 
@@ -38,5 +38,5 @@ class EchoServer
 
 global $argv;
 
-$server = new EchoServer();
-$server->run($argv[1]);
+$server = new UnixSocketTestServer();
+$server->run($argv[1], unserialize($argv[2]));

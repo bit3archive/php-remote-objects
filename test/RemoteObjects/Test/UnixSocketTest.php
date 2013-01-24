@@ -10,7 +10,7 @@ use RemoteObjects\Client;
 use RemoteObjects\Encode\JsonRpc20Encoder;
 use RemoteObjects\Transport\UnixSocketClient;
 
-class UnixSocketTest extends AbstractInvokationTestCase
+class UnixSocketTest extends AbstractInvocationTestCase
 {
 	/**
 	 * @var string
@@ -34,12 +34,17 @@ class UnixSocketTest extends AbstractInvokationTestCase
 	}
 
 	/**
+	 * @param string $target
+	 * @param Logger $logger
 	 * @return Server
 	 */
-	protected function spawnServer()
+	protected function spawnServer($target, $logger)
 	{
 		$server = new Process(
-			'php ' . escapeshellarg(__DIR__ . '/UnixSocketEchoServer.php') . ' ' . escapeshellarg($this->serverSocket),
+			'php ' .
+				escapeshellarg(__DIR__ . '/UnixSocketTestServer.php') .
+				' ' . escapeshellarg($this->serverSocket) .
+				' ' . escapeshellarg(serialize($target)),
 			__DIR__
 		);
 		$server->setTimeout(15);
@@ -58,11 +63,8 @@ class UnixSocketTest extends AbstractInvokationTestCase
 	/**
 	 * @return Client
 	 */
-	protected function spawnClient()
+	protected function spawnClient($logger)
 	{
-		$logger = new Logger('phpunit');
-		$logger->pushHandler(new StreamHandler('php://stderr'));
-
 		// wait for server
 		do {
 			sleep(1);

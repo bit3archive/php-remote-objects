@@ -104,7 +104,7 @@ class Client
 	/**
 	 * Get a named remote object proxy.
 	 *
-	 * @param string $key
+	 * @param string      $key
 	 * @param string|null $interface
 	 *
 	 * @return RemoteObject
@@ -112,9 +112,34 @@ class Client
 	public function getRemoteObject($key, $interface = null)
 	{
 		if ($interface) {
+			if (
+				$this->logger !== null &&
+				$this->logger->isHandling(\Monolog\Logger::DEBUG)
+			) {
+				$this->logger->addDebug(
+					'Create new virtual remote object proxy',
+					array(
+						 'interface' => $interface,
+						 'path'      => $key
+					)
+				);
+			}
+
 			return RemoteObjectProxyGenerator::generate($this, $interface, $key);
 		}
 		else {
+			if (
+				$this->logger !== null &&
+				$this->logger->isHandling(\Monolog\Logger::DEBUG)
+			) {
+				$this->logger->addDebug(
+					'Get remote object proxy',
+					array(
+						 'path' => $key
+					)
+				);
+			}
+
 			return new RemoteObjectProxy($this, $key);
 		}
 	}

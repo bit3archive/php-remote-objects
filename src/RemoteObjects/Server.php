@@ -130,6 +130,19 @@ class Server
 				$result = null;
 			}
 			else {
+				if (
+					$this->logger !== null &&
+					$this->logger->isHandling(\Monolog\Logger::DEBUG)
+				) {
+					$this->logger->addDebug(
+						'Receive remote method invocation',
+						array(
+							 'method' => $method,
+							 'params' => $params
+						)
+					);
+				}
+
 				$result = $this->invoke(
 					$this->target,
 					$method,
@@ -211,15 +224,43 @@ class Server
 				}
 			}
 		}
-		else {
+		else if (is_object($targetObject)) {
 			$class = new \ReflectionClass($targetObject);
 
 			if ($class->hasMethod($methodName)) {
 				$method = $class->getMethod($methodName);
 				if ($method->isPublic()) {
+					if (
+						$this->logger !== null &&
+						$this->logger->isHandling(\Monolog\Logger::DEBUG)
+					) {
+						$this->logger->addDebug(
+							'Invoke method from remote',
+							array(
+								 'class' => get_class($targetObject),
+								 'method' => $methodName,
+								 'params' => $methodParams
+							)
+						);
+					}
+
 					return $method->invokeArgs($targetObject, $methodParams);
 				}
 			}
+		}
+
+		if (
+			$this->logger !== null &&
+			$this->logger->isHandling(\Monolog\Logger::DEBUG)
+		) {
+			$this->logger->addError(
+				'Could not invoke method, because method not exists or not accessible',
+				array(
+					 'class' => get_class($targetObject),
+					 'method' => $methodName,
+					 'params' => $methodParams
+				)
+			);
 		}
 
 		throw new \Exception('Method not found', -32601);

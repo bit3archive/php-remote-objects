@@ -22,6 +22,16 @@ class RemoteObjectProxy implements RemoteObject
 		$this->path   = $path;
 	}
 
+	public function __get($name)
+	{
+		return new RemoteObjectProxy(
+			$this->client,
+			$this->path
+				? $this->path . '.' . $name
+				: $name
+		);
+	}
+
 	public function __call($name, $args)
 	{
 		return $this->client->invokeArgs(

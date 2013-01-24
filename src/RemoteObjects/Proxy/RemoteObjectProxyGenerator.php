@@ -43,9 +43,15 @@ class $shortProxyName implements \RemoteObjects\RemoteObject, \\{$interfaceName}
 	 */
 	protected \$client;
 
-	function __construct(\$client)
+	/**
+	 * @var string
+	 */
+	protected \$path;
+
+	function __construct(\$client, \$path)
 	{
 		\$this->client = \$client;
+		\$this->path   = \$path;
 	}
 
 
@@ -92,9 +98,7 @@ EOF;
 				}
 
 				$escapedName = var_export(
-					$path
-						? $path . '.' . $methodName
-						: $methodName,
+					$methodName,
 					true
 				);
 
@@ -102,7 +106,9 @@ EOF;
 
 	) {
 		return \$this->client->invokeArgs(
-			$escapedName,
+			\$this->path
+				? \$this->path . '.' . $escapedName
+				: $escapedName,
 			func_get_args()
 		);
 	}
@@ -125,6 +131,6 @@ EOF;
 			eval($code);
 		}
 
-		return new $proxyName($client, null);
+		return new $proxyName($client, $path);
 	}
 }
