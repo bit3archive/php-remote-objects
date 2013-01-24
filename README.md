@@ -1,6 +1,8 @@
 Remote object method invocation framework
 =========================================
 
+[![Build Status](https://travis-ci.org/bit3/php-RemoteObjects.png?branch=master)](https://travis-ci.org/bit3/php-RemoteObjects)
+
 Com'on, not another method invocation framework?
 Aren't there enough XML-RPC, JSON-RPC and similar implementations out there?
 Yes, there are, but they are not flexible enough and most of them do not provide any security features like encryption.
