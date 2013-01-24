@@ -2,6 +2,7 @@
 	"name":"bit3/remote-objects",
 	"description":"Remote object method invokation framework",
 	"version":"1.0.0-dev",
+	"keywords":["rpc","json-rpc","xml-rpc","json","api","remote","method","encryption","rsa","aes"],
 	"homepage":"https://github.com/bit3/php-RemoteObjects",
 	"license":"MIT",
 	"authors":[
