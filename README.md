@@ -157,6 +157,20 @@ To call `$targetII->method()` for example, the method name will be `a.two.II.met
 
 Hint: You can also use `ArrayAccess` compatible objects, instead of arrays!
 
+For better and more programmatic chaining, is is possible to access the structure by virtual attributes of the `RemoteObject` objects.
+Accessing a property of `RemoteObject` will give you a new `RemoteObject` instance to this named path (similar to `Client::getRemoteObject(<name>)`).
+
+According to the previous example, access to `a.two.II.method` is also possible this way:
+
+```php
+$result = $client
+	->castAsRemoteObject()
+	->a
+	->two
+	->II
+	->method();
+```
+
 Lazy objects
 ------------
 
