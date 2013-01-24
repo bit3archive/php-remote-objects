@@ -1,13 +1,13 @@
-Remote objects invocation framework
-===================================
+Remote object method invocation framework
+=========================================
 
-Com'on, not another invocation framework?
-Is there are not enough XML-RPC, JSON-RPC and similar implementations out there?
-Yes, they are, but they are all not flexible enough and most do not provide any security features like encryption.
+Com'on, not another method invocation framework?
+Aren't there enough XML-RPC, JSON-RPC and similar implementations out there?
+Yes, there are, but they are not flexible enough and most of them do not provide any security features like encryption.
 
 The benefit of RemoteObjects is to provide a remote method invocation framework,
-that is secure (allow encryption), flexible (allow different transports like unix socket) and interoperable (support JSON-RPC 2.0 by default, but can also support XML-RPC or other standard).
-Every component is exchangeable, if you like, you also able to invoke a method via SMS, or just use your own protocol instead of JSON-RPC. Everything is possible!
+that is secure (allow encryption), flexible (allow different transports like unix socket) and interoperable (support JSON-RPC 2.0 by default, but can also support XML-RPC or other protocols).
+Every component is exchangeable, if you like, you are also able to invoke a method via SMS as transport layer, or just use your own protocol instead of JSON-RPC. Everything is possible!
 
 How it works
 ------------
@@ -108,10 +108,18 @@ echo $result; // -> "Hello Tristan"
 Security
 --------
 
-Sometimes you will increase security, but your transport layer does not support encryption (for example you cannot use HTTPS for some reason).
-RemoteObjects provide a `RsaEncoder` that encrypt the data before transport and decode before evaluation.
+Sometimes you want to increase security, but your transport layer does not support encryption (for example you cannot use HTTPS for some reason).
+RemoteObjects provides an `AesEncoder` and a `RsaEncoder` that encrypt the data before transport and decode before evaluation.
 
-Using the `RsaEncoder`, is really simple:
+Using the `AesEncoder` or `RsaEncoder`, is really simple:
+```php
+$jsonEncoder = new RemoteObjects\Encode\JsonRpc20Encoder();
+$encoder = new RemoteObjects\Encode\AesEncoder(
+	$jsonEncoder,
+	'<add your pre-shared key here>'
+);
+```
+
 ```php
 $jsonEncoder = new RemoteObjects\Encode\JsonRpc20Encoder();
 $encoder = new RemoteObjects\Encode\RsaEncoder(
