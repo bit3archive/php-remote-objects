@@ -2,20 +2,8 @@
 
 namespace RemoteObjects\Encode;
 
-class RsaEncoder implements Encoder
+class RsaEncoder extends CryptEncoder
 {
-	/**
-	 * The logger facility.
-	 *
-	 * @var \Monolog\Logger
-	 */
-	protected $logger;
-
-	/**
-	 * @var Encoder
-	 */
-	protected $encoder;
-
 	/**
 	 * @var string
 	 */
@@ -35,30 +23,14 @@ class RsaEncoder implements Encoder
 
 	/**
 	 * @param Encoder $encoder
-	 * @param string $remotePublicKey
-	 * @param string $localPrivateKey
+	 * @param string  $remotePublicKey
+	 * @param string  $localPrivateKey
 	 */
-	function __construct(Encoder $encode, $remotePublicKey, $localPrivateKey)
+	function __construct(Encoder $encoder, $remotePublicKey, $localPrivateKey)
 	{
+		parent::__construct($encoder);
 		$this->remotePublicKey = $remotePublicKey;
 		$this->localPrivateKey = $localPrivateKey;
-	}
-
-	/**
-	 * @param \Monolog\Logger $logger
-	 */
-	public function setLogger($logger)
-	{
-		$this->logger = $logger;
-		return $this;
-	}
-
-	/**
-	 * @return \Monolog\Logger
-	 */
-	public function getLogger()
-	{
-		return $this->logger;
 	}
 
 	/**
@@ -127,79 +99,5 @@ class RsaEncoder implements Encoder
 		$string = $rsa->decrypt($crypt);
 
 		return $string;
-	}
-
-	/**
-	 * Encode a method call.
-	 *
-	 * @param $mixed
-	 *
-	 * @return string
-	 */
-	public function encodeMethod($method, $params)
-	{
-		$string = $this->encoder->encodeMethod($method, $params);
-
-		return $this->encrypt($string);
-	}
-
-	/**
-	 * Encode an exception.
-	 *
-	 * @param \Exception $exception
-	 *
-	 * @return string
-	 */
-	public function encodeException(\Exception $exception)
-	{
-		$string = $this->encoder->encodeException($exception);
-
-		return $this->encrypt($string);
-	}
-
-	/**
-	 * Encode a result from the method call.
-	 *
-	 * @param mixed $result
-	 *
-	 * @return string
-	 */
-	public function encodeResult($result)
-	{
-		$string = $this->encoder->encodeResult($result);
-
-		return $this->encrypt($string);
-	}
-
-	/**
-	 * Decode an encoded method.
-	 *
-	 * @param $string
-	 *
-	 * @return array An array with 2 elements: [<method name>, <method params>]
-	 *
-	 * @throws Throw an exception, if $string is an error or contains an error.
-	 */
-	public function decodeMethod($crypt)
-	{
-		$string = $this->decrypt($crypt);
-
-		return $this->encoder->decodeMethod($string);
-	}
-
-	/**
-	 * Decode an encoded result.
-	 *
-	 * @param $string
-	 *
-	 * @return mixed
-	 *
-	 * @throws Throw an exception, if $string is an error or contains an error.
-	 */
-	public function decodeResult($crypt)
-	{
-		$string = $this->decrypt($crypt);
-
-		return $this->encoder->decodeResult($string);
 	}
 }
