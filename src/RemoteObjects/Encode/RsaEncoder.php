@@ -25,10 +25,12 @@ class RsaEncoder extends CryptEncoder
 	 * @param Encoder $encoder
 	 * @param string  $remotePublicKey
 	 * @param string  $localPrivateKey
+	 * @param bool    $plainExceptions If encryption fails, return a plain unencrypted exception.
+	 *                                 This is only useful on servers and for debugging.
 	 */
-	function __construct(Encoder $encoder, $remotePublicKey, $localPrivateKey)
+	function __construct(Encoder $encoder, $remotePublicKey, $localPrivateKey, $plainExceptions = false)
 	{
-		parent::__construct($encoder);
+		parent::__construct($encoder, $plainExceptions);
 		$this->remotePublicKey = $remotePublicKey;
 		$this->localPrivateKey = $localPrivateKey;
 	}

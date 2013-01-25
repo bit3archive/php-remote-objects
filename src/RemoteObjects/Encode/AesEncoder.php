@@ -18,12 +18,13 @@ class AesEncoder extends CryptEncoder
 
 	/**
 	 * @param Encoder $encoder
-	 * @param string $remotePublicKey
-	 * @param string $localPrivateKey
+	 * @param string $psk The pre-shared key.
+	 * @param bool    $plainExceptions If encryption fails, return a plain unencrypted exception.
+	 *                                 This is only useful on servers and for debugging.
 	 */
-	function __construct(Encoder $encoder, $psk)
+	function __construct(Encoder $encoder, $psk, $plainExceptions = false)
 	{
-		parent::__construct($encoder);
+		parent::__construct($encoder, $plainExceptions);
 		$this->psk = (string) $psk;
 	}
 

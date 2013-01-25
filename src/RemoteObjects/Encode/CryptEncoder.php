@@ -10,13 +10,19 @@ abstract class CryptEncoder extends LoggingEncoder
 	protected $encoder;
 
 	/**
-	 * @param Encoder $encoder
-	 * @param string  $remotePublicKey
-	 * @param string  $localPrivateKey
+	 * @var bool
 	 */
-	function __construct(Encoder $encoder)
+	protected $plainExceptions;
+
+	/**
+	 * @param Encoder $encoder
+	 * @param bool    $plainExceptions If encryption fails, return a plain unencrypted exception.
+	 *                                 This is only useful on servers and for debugging.
+	 */
+	function __construct(Encoder $encoder, $plainExceptions = false)
 	{
 		$this->encoder         = $encoder;
+		$this->plainExceptions = $plainExceptions;
 	}
 
 	public abstract function encrypt($string);
@@ -48,7 +54,15 @@ abstract class CryptEncoder extends LoggingEncoder
 	{
 		$string = $this->encoder->encodeException($exception);
 
-		return $this->encrypt($string);
+		try {
+			return $this->encrypt($string);
+		}
+		catch (\Exception $e) {
+			if ($this->plainExceptions) {
+				return $string;
+			}
+			throw $e;
+		}
 	}
 
 	/**
