@@ -121,9 +121,11 @@ class JsonRpc20Encoder implements Encoder
 
 		$this->lastDecodeId = $json->id;
 
+		/*
 		if (substr($json->method, 0, 4) == 'rpc.') {
 			return array(null, null);
 		}
+		*/
 
 		return array(
 			$json->method,
