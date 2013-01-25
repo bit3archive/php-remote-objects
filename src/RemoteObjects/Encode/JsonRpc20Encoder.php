@@ -61,8 +61,8 @@ class JsonRpc20Encoder implements Encoder
 		$json          = new \stdClass();
 		$json->code    = $exception->getCode();
 		$json->message = $exception->getMessage();
-		$json->trace   = $exception->getTraceAsString();
-		$json->data    = $this->encodeExceptionObject($exception->getPrevious());
+		#$json->trace   = $exception->getTraceAsString();
+		#$json->data    = $this->encodeExceptionObject($exception->getPrevious());
 		return $json;
 	}
 
