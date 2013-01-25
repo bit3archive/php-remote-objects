@@ -198,28 +198,39 @@ class Server
 
 			// access object property
 			else if (is_object($targetObject)) {
-				$class = new \ReflectionClass($targetObject);
-
-				if ($class->hasProperty($propertyName)) {
-					$property = $class->getProperty($propertyName);
-					if ($property->isPublic()) {
+				if (get_class($targetObject) == 'stdClass') {
+					if (isset($targetObject->$propertyName)) {
 						return $this->invoke(
-							$property->getValue($targetObject),
+							$targetObject->$propertyName,
 							$methodName,
 							$methodParams
 						);
 					}
 				}
+				else {
+					$class = new \ReflectionClass($targetObject);
 
-				$getterName = 'get' . implode('', array_map('ucfirst', explode('_', $property)));
-				if ($class->hasMethod($getterName)) {
-					$getter = $class->getMethod($getterName);
-					if ($getter->isPublic()) {
-						return $this->invoke(
-							$getter->invoke($targetObject),
-							$methodName,
-							$methodParams
-						);
+					if ($class->hasProperty($propertyName)) {
+						$property = $class->getProperty($propertyName);
+						if ($property->isPublic()) {
+							return $this->invoke(
+								$property->getValue($targetObject),
+								$methodName,
+								$methodParams
+							);
+						}
+					}
+
+					$getterName = 'get' . implode('', array_map('ucfirst', explode('_', $property)));
+					if ($class->hasMethod($getterName)) {
+						$getter = $class->getMethod($getterName);
+						if ($getter->isPublic()) {
+							return $this->invoke(
+								$getter->invoke($targetObject),
+								$methodName,
+								$methodParams
+							);
+						}
 					}
 				}
 			}
