@@ -32,10 +32,10 @@ class UnixSocketServer extends UnixSocket implements Server
 	 * @param mixed      $result
 	 * @param \Exception $error
 	 */
-	public function respond($json)
+	public function respond($response)
 	{
 		$socket = $this->getSocket();
 
-		$this->socketSend($socket, $json);
+		$this->socketSend($socket, $response);
 	}
 }
