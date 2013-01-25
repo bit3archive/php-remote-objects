@@ -90,7 +90,7 @@ class JsonRpc20Encoder implements Encoder
 	{
 		$json = json_decode($string);
 
-		if ($json === null) {
+		if (!is_object($json)) {
 			throw new \Exception(
 				'Parse error',
 				-32700,
