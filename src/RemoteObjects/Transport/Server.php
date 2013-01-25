@@ -17,5 +17,5 @@ interface Server
 	 * @param mixed      $result
 	 * @param \Exception $error
 	 */
-	public function respond($json);
+	public function respond($response);
 }
