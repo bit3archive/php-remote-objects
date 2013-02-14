@@ -11,7 +11,7 @@ class RemoteObjectProxyGenerator
 		$class = new \ReflectionClass($interface);
 
 		if (!$class->isInterface()) {
-			throw new Exception('You cannot build a virtual proxy from a non-interface!');
+			throw new \Exception('You cannot build a virtual proxy from a non-interface!');
 		}
 
 		$interfaceName  = $class->getName();
