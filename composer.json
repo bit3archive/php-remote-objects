@@ -19,9 +19,10 @@
 		"source":"https://github.com/bit3/php-RemoteObjects"
 	},
 	"require-dev": {
-		"phpunit/phpunit":"3.*",
-		"monolog/monolog":"1.3.*",
-		"symfony/process":"2.1.*"
+		"phpunit/phpunit":"~3",
+		"monolog/monolog":"~1.3",
+		"phpseclib/phpseclib": "*",
+		"symfony/process":"~2.1"
 	},
 	"suggest": {
 		"phpseclib/phpseclib":"Required for encrypted transport.",
