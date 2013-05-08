@@ -11,6 +11,8 @@ The benefit of RemoteObjects is to provide a remote method invocation framework,
 that is secure (allow encryption), flexible (allow different transports like unix socket) and interoperable (support JSON-RPC 2.0 by default, but can also support XML-RPC or other protocols).
 Every component is exchangeable, if you like, you are also able to invoke a method via SMS as transport layer, or just use your own protocol instead of JSON-RPC. Everything is possible!
 
+Or in other words: This framework combines the pros of all the others ;-)
+
 How it works
 ------------
 
