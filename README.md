@@ -246,15 +246,15 @@ $remote = $client->castAsRemoteObject();
 
 Now every call `$remote->method($arg1, $arg2, ...)` will directly passed to `$client->invokeArgs('method', [$arg1, $arg2, ...])`.
 
-Interface mapping
------------------
+Type mapping
+------------
 
 One big problem of remote method invocation, and the previous shown method is the nescience of the remote methods.
 Every object you get with `Client::getRemoteObject` or `Client::castAsRemoteObject` is just a primitive proxy, without any methods.
 You are unable to use `method_exists` or `ReflectionClass` to "inspect" the object and its methods.
 
-To solve this problem, RemoteObjects allow you to specify an interface, to use as `RemoteObject`.
-Just specify your interface, when calling `Client::getRemoteObject` or `Client::castAsRemoteObject`.
+To solve this problem, RemoteObjects allow you to specify a type, to use as `RemoteObject`.
+Just specify your type, when calling `Client::getRemoteObject` or `Client::castAsRemoteObject`.
 
 ```php
 interface MyRemote
@@ -265,14 +265,33 @@ interface MyRemote
 $remote = $client->castAsRemoteObject('MyRemote');
 ```
 
+Since version 1.2 you can also use a class.
+
+```php
+class MyRemote
+{
+	public function remoteMethod()
+	{
+		// ...
+	}
+}
+
+$remote = $client->castAsRemoteObject('MyRemote');
+```
+
 The object `$remote` **is** an instance of `MyRemote`, but it is also an instance of `RemoteObjects\RemoteObject`.
 
 How this works?
-Internally a virtual temporary proxy class is generated, named `MyRemoteProxy` (just 'Proxy' is prefixed) that implements the interface.
-This method only works with interfaces.
+Internally a virtual temporary proxy class is generated, named `RemoteProxies\__WS__\MyRemote` (the namespace is prefixed, in previous version the class name was suffixed) that implements the interface.
 
 With this technique you can make nearly every object remote and pass the object to other methods without type hint mismatch.
 All you need is an interface.
+
+Known limitations
+-----------------
+
+* Pass parameters by reference is impossible for remote objects.
+* Parameters that are unable to be serialized cannot be transported to the remote endpoint.
 
 Security
 --------
@@ -280,7 +299,12 @@ Security
 Sometimes you want to increase security, but your transport layer does not support encryption (for example you cannot use HTTPS for some reason).
 RemoteObjects provides an `AesEncoder` and a `RsaEncoder` that encrypt the data before transport and decode before evaluation.
 
-Using the `AesEncoder` or `RsaEncoder`, is really simple:
+Using the `AesEncoder` or `RsaEncoder`, is really simple.
+
+AES
+===
+
+Server and client:
 ```php
 $jsonEncoder = new RemoteObjects\Encode\JsonRpc20Encoder();
 $encoder = new RemoteObjects\Encode\AesEncoder(
@@ -289,12 +313,26 @@ $encoder = new RemoteObjects\Encode\AesEncoder(
 );
 ```
 
+RSA
+===
+
+Server:
 ```php
 $jsonEncoder = new RemoteObjects\Encode\JsonRpc20Encoder();
 $encoder = new RemoteObjects\Encode\RsaEncoder(
 	$jsonEncoder,
-	'<add remote public key here>',
-	'<add local private key here>'
+	'<add client public key here>',
+	'<add server private key here>'
+);
+```
+
+Client:
+```php
+$jsonEncoder = new RemoteObjects\Encode\JsonRpc20Encoder();
+$encoder = new RemoteObjects\Encode\RsaEncoder(
+	$jsonEncoder,
+	'<add server public key here>',
+	'<add client private key here>'
 );
 ```
 
