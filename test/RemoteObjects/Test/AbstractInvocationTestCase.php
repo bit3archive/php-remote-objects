@@ -4,6 +4,10 @@ namespace RemoteObjects\Test;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use RemoteObjects\Encode\AesEncoder;
+use RemoteObjects\Encode\Encoder;
+use RemoteObjects\Encode\JsonRpc20Encoder;
+use RemoteObjects\Encode\RsaEncoder;
 use RemoteObjects\Server;
 use RemoteObjects\Client;
 use RemoteObjects\RemoteObject;
@@ -20,7 +24,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return Server
 	 */
-	protected abstract function spawnServer($target, $logger);
+	protected abstract function spawnServer($target, $logger, Encoder $encoder);
 
 	/**
 	 * @return Server
@@ -30,28 +34,97 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return Client
 	 */
-	protected abstract function spawnClient($logger);
+	protected abstract function spawnClient($logger, Encoder $encoder);
 
 	/**
 	 * @return Client
 	 */
 	protected abstract function shutdownClient($client);
 
+	public function providerEncoderChains()
+	{
+		$aesPsk = md5(uniqid(mt_rand()));
+
+		$rsa = new \Crypt_RSA();
+		$serverKey = $rsa->createKey();
+		$clientKey = $rsa->createKey();
+
+		return array(
+			array(
+				new JsonRpc20Encoder(),
+				new JsonRpc20Encoder(),
+			),
+			array(
+				new AesEncoder(
+					new JsonRpc20Encoder(),
+					$aesPsk
+				),
+				new AesEncoder(
+					new JsonRpc20Encoder(),
+					$aesPsk
+				),
+			),
+			array(
+				new RsaEncoder(
+					new JsonRpc20Encoder(),
+					$clientKey['publickey'],
+					$serverKey['privatekey']
+				),
+				new RsaEncoder(
+					new JsonRpc20Encoder(),
+					$serverKey['publickey'],
+					$clientKey['privatekey']
+				)
+			)
+		);
+	}
+	
+	public function providerRemoteObjectTypes()
+	{
+		$encoderChain = $this->providerEncoderChains();
+
+		$data = array();
+
+		foreach (
+			array(
+				null,
+				'RemoteObjects\Test\EchoInterface',
+				'RemoteObjects\Test\EchoObject'
+			) as $type
+		) {
+			foreach ($encoderChain as $encoders) {
+				$data[] = array_merge(
+					array($type),
+					$encoders
+				);
+			}
+		}
+
+		return $data;
+	}
+
 	/**
+	 * @dataProvider providerEncoderChains
 	 * @covers \RemoteObjects\Client::invoke
 	 * @covers \RemoteObjects\Server::handle
 	 */
-	public function testInvoke()
+	public function testInvoke(Encoder $serverEncoder, Encoder $clientEncoder)
 	{
 		$logger = $this->getLogger('phpunit');
 		$serverLogger = $this->getLogger('server');
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug('--- InvocationTestCase::testInvoke() ---');
+			$logger->addDebug(
+				sprintf(
+					'--- InvocationTestCase::testInvoke(%s, %s) ---',
+					get_class($serverEncoder),
+					get_class($clientEncoder)
+				)
+			);
 
-			$server = $this->spawnServer(new EchoObject(), $serverLogger);
-			$client = $this->spawnClient($clientLogger);
+			$server = $this->spawnServer(new EchoObject(), $serverLogger, $serverEncoder);
+			$client = $this->spawnClient($clientLogger, $clientEncoder);
 
 			$result = $client->invoke('reply', 'Hello World!');
 			$this->assertEquals('Hello World!', $result);
@@ -60,6 +133,8 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
+			$logger->addError($e->getMessage());
+
 			if (isset($client)) {
 				try {
 					$this->shutdownClient($client);
@@ -81,28 +156,37 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @dataProvider providerEncoderChains
 	 * @covers \RemoteObjects\Client::invoke
 	 * @covers \RemoteObjects\Server::handle
 	 */
-	public function testInvalidMethod()
+	public function testInvalidMethod(Encoder $serverEncoder, Encoder $clientEncoder)
 	{
 		$logger = $this->getLogger('phpunit');
 		$serverLogger = $this->getLogger('server');
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug('--- InvocationTestCase::testInvalidMethod() ---');
+			$logger->addDebug(
+				sprintf(
+					'--- InvocationTestCase::testInvalidMethod(%s, %s) ---',
+					get_class($serverEncoder),
+					get_class($clientEncoder)
+				)
+			);
 
-			$server = $this->spawnServer(new EchoObject(), $serverLogger);
+			$server = $this->spawnServer(new EchoObject(), $serverLogger, $serverEncoder);
 			$this->setExpectedException('Exception', 'Method not found', -32601);
 
-			$client = $this->spawnClient($clientLogger);
+			$client = $this->spawnClient($clientLogger, $clientEncoder);
 
 			$client->invoke('unknownMethod');
 			$this->shutdownClient($client);
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
+			$logger->addError($e->getMessage());
+
 			if (isset($client)) {
 				try {
 					$this->shutdownClient($client);
@@ -124,29 +208,39 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @dataProvider providerRemoteObjectTypes
 	 * @covers \RemoteObjects\Client::castAsRemoteObject
 	 */
-	public function testClientCast()
+	public function testClientCast($remoteObjectType, Encoder $serverEncoder, Encoder $clientEncoder)
 	{
 		$logger = $this->getLogger('phpunit');
 		$serverLogger = $this->getLogger('server');
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug('--- InvocationTestCase::testClientCast() ---');
+			$logger->addDebug(
+				sprintf(
+					'--- InvocationTestCase::testClientCast(%s, %s, %s) ---',
+					$remoteObjectType ? $remoteObjectType : 'null',
+					get_class($serverEncoder),
+					get_class($clientEncoder)
+				)
+			);
 
-			$server = $this->spawnServer(new EchoObject(), $serverLogger);
-			$client = $this->spawnClient($clientLogger);
+			$server = $this->spawnServer(new EchoObject(), $serverLogger, $serverEncoder);
+			$client = $this->spawnClient($clientLogger, $clientEncoder);
 
 			/** @var EchoInterface $echo */
-			$echo = $client->castAsRemoteObject('RemoteObjects\Test\EchoInterface');
+			$echo = $client->castAsRemoteObject($remoteObjectType);
 
 			$this->assertTrue(
 				$echo instanceof RemoteObject
 			);
-			$this->assertTrue(
-				$echo instanceof EchoInterface
-			);
+			if ($remoteObjectType !== null) {
+				$this->assertTrue(
+					is_a($echo, $remoteObjectType)
+				);
+			}
 			$this->assertEquals(
 				'Hello World!',
 				$echo->reply('Hello World!')
@@ -156,6 +250,8 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
+			$logger->addError($e->getMessage());
+
 			if (isset($client)) {
 				try {
 					$this->shutdownClient($client);
@@ -177,39 +273,56 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @dataProvider providerRemoteObjectTypes
 	 * @covers \RemoteObjects\Client::getRemoteObject
 	 */
-	public function testNamedRemote()
+	public function testNamedRemote($remoteObjectType, Encoder $serverEncoder, Encoder $clientEncoder)
 	{
 		$logger = $this->getLogger('phpunit');
 		$serverLogger = $this->getLogger('server');
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug('--- InvocationTestCase::testNamedRemote() ---');
+			$logger->addDebug(
+				sprintf(
+					'--- InvocationTestCase::testNamedRemote(%s, %s, %s) ---',
+					$remoteObjectType ? $remoteObjectType : 'null',
+					get_class($serverEncoder),
+					get_class($clientEncoder)
+				)
+			);
 
 			$server = $this->spawnServer(
 				array(
 					 'echo' => new EchoObject()
 				),
-				$serverLogger
+				$serverLogger, $serverEncoder
 			);
-			$client = $this->spawnClient($clientLogger);
+			$client = $this->spawnClient($clientLogger, $clientEncoder);
 
 			/** @var EchoInterface $echo */
-			$echo = $client->getRemoteObject('echo', 'RemoteObjects\Test\EchoInterface');
+			$echo = $client->getRemoteObject('echo', $remoteObjectType);
 
 			$this->assertTrue(
 				$echo instanceof RemoteObject
 			);
-			$this->assertTrue(
-				$echo instanceof EchoInterface
-			);
-			$this->assertAttributeEquals(
-				'echo',
-				'path',
-				$echo
-			);
+			if ($remoteObjectType !== null) {
+				$this->assertTrue(
+					is_a($echo, $remoteObjectType)
+				);
+				$this->assertAttributeEquals(
+					'echo',
+					'___path',
+					$echo
+				);
+			}
+			else {
+				$this->assertAttributeEquals(
+					'echo',
+					'path',
+					$echo
+				);
+			}
 			$this->assertEquals(
 				'Hello World!',
 				$echo->reply('Hello World!')
@@ -219,6 +332,8 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
+			$logger->addError($e->getMessage());
+
 			if (isset($client)) {
 				try {
 					$this->shutdownClient($client);
@@ -240,24 +355,31 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @dataProvider providerEncoderChains
 	 * @covers \RemoteObjects\Client::getRemoteObject
 	 */
-	public function testChaining()
+	public function testChaining(Encoder $serverEncoder, Encoder $clientEncoder)
 	{
 		$logger = $this->getLogger('phpunit');
 		$serverLogger = $this->getLogger('server');
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug('--- InvocationTestCase::testChaining() ---');
+			$logger->addDebug(
+				sprintf(
+					'--- InvocationTestCase::testChaining(%s, %s) ---',
+					get_class($serverEncoder),
+					get_class($clientEncoder)
+				)
+			);
 
 			$server = $this->spawnServer(
 				array(
 					 'echo' => new EchoObject()
 				),
-				$serverLogger
+				$serverLogger, $serverEncoder
 			);
-			$client = $this->spawnClient($clientLogger);
+			$client = $this->spawnClient($clientLogger, $clientEncoder);
 
 			/** @var RemoteObject $remote */
 			/** @var EchoInterface $echo */
@@ -291,6 +413,8 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
+			$logger->addError($e->getMessage());
+
 			if (isset($client)) {
 				try {
 					$this->shutdownClient($client);

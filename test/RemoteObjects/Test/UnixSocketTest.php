@@ -4,6 +4,7 @@ namespace RemoteObjects\Test;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use RemoteObjects\Encode\Encoder;
 use Symfony\Component\Process\Process;
 use RemoteObjects\Server;
 use RemoteObjects\Client;
@@ -38,18 +39,21 @@ class UnixSocketTest extends AbstractInvocationTestCase
 	 * @param Logger $logger
 	 * @return Server
 	 */
-	protected function spawnServer($target, $logger)
+	protected function spawnServer($target, $logger, Encoder $encoder)
 	{
-		$server = new Process(
-			'php ' .
-				escapeshellarg(__DIR__ . '/UnixSocketTestServer.php') .
-				' ' . escapeshellarg($this->serverSocket) .
-				' ' . escapeshellarg(serialize($target)),
-			__DIR__
-		);
-		$server->setTimeout(15);
-		$server->start();
-		return $server;
+		$pid = pcntl_fork();
+
+		if ($pid == -1) {
+			throw new \Exception('Could not spawn the server!');
+		}
+		else if ($pid) {
+			return $pid;
+		}
+		else {
+			$server = new UnixSocketTestServer();
+			$server->run($this->serverSocket, $target, $encoder);
+			exit;
+		}
 	}
 
 	/**
@@ -57,13 +61,13 @@ class UnixSocketTest extends AbstractInvocationTestCase
 	 */
 	protected function shutdownServer($server)
 	{
-		$server->wait();
+		pcntl_waitpid($server, $status);
 	}
 
 	/**
 	 * @return Client
 	 */
-	protected function spawnClient($logger)
+	protected function spawnClient($logger, Encoder $encoder)
 	{
 		// wait for server
 		do {
@@ -73,7 +77,6 @@ class UnixSocketTest extends AbstractInvocationTestCase
 		$transport = new UnixSocketClient($this->clientSocket, $this->serverSocket);
 		$transport->setLogger($logger);
 
-		$encoder = new JsonRpc20Encoder();
 		$encoder->setLogger($logger);
 
 		return new Client(

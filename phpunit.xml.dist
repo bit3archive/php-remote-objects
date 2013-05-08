@@ -10,7 +10,7 @@
 		 strict="true">
 	<testsuites>
 		<testsuite name="RemoteObjectsTestSuite">
-			<directory suffix="Test.php">test/RemoteObjectsTestSuite/Test/</directory>
+			<directory suffix="Test.php">test/RemoteObjects/Test/</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
