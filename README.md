@@ -301,8 +301,7 @@ RemoteObjects provides an `AesEncoder` and a `RsaEncoder` that encrypt the data 
 
 Using the `AesEncoder` or `RsaEncoder`, is really simple.
 
-AES
-===
+### AES
 
 Server and client:
 ```php
@@ -313,8 +312,7 @@ $encoder = new RemoteObjects\Encode\AesEncoder(
 );
 ```
 
-RSA
-===
+### RSA
 
 Server:
 ```php
