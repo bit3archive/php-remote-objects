@@ -10,48 +10,49 @@ class RemoteObjectProxyGenerator
 	{
 		$class = new \ReflectionClass($interface);
 
-		if (!$class->isInterface()) {
-			throw new \Exception('You cannot build a virtual proxy from a non-interface!');
+		$extends = '';
+		$implements = 'implements \RemoteObjects\RemoteObject';
+
+		if ($class->isInterface()) {
+			$implements .= ', \\' . $class->getName();
+		}
+		else {
+			$extends = 'extends \\' . $class->getName();
 		}
 
-		$interfaceName  = $class->getName();
+		if ($class->inNamespace()) {
+			$ns = 'RemoteProxies\\' . RemoteObjectProxy::NS_SEPARATOR . '\\' . $class->getNamespaceName();
+		}
+		else {
+			$ns = 'RemoteProxies\\' . RemoteObjectProxy::NS_SEPARATOR;
+		}
+
 		$shortName      = $class->getShortName();
-		$shortProxyName = $shortName . 'Proxy';
-		$proxyName      = $class->inNamespace()
-			? $class->getNamespaceName() . '\\' . $shortProxyName
-			: $shortProxyName;
+		$shortProxyName = $shortName;
+		$proxyName      = $ns . '\\' . $shortProxyName;
 
 		if (!class_exists($proxyName)) {
 			$code = '';
 
-			if ($class->inNamespace()) {
-				$ns = $class->getNamespaceName();
-
-				$code .= <<<EOF
+			$code .= <<<EOF
 namespace $ns {
 
-
-EOF;
-
-			}
-
-			$code .= <<<EOF
-class $shortProxyName implements \RemoteObjects\RemoteObject, \\{$interfaceName}
+class $shortProxyName {$extends} {$implements}
 {
 	/**
 	 * @var \RemoteObjects\Client
 	 */
-	protected \$client;
+	protected \$___client;
 
 	/**
 	 * @var string
 	 */
-	protected \$path;
+	protected \$___path;
 
 	function __construct(\$client, \$path)
 	{
-		\$this->client = \$client;
-		\$this->path   = \$path;
+		\$this->___client = \$client;
+		\$this->___path   = \$path;
 	}
 
 
@@ -105,9 +106,9 @@ EOF;
 				$code .= <<<EOF
 
 	) {
-		return \$this->client->invokeArgs(
-			\$this->path
-				? \$this->path . '.' . $escapedName
+		return \$this->___client->invokeArgs(
+			\$this->___path
+				? \$this->___path . '.' . $escapedName
 				: $escapedName,
 			func_get_args()
 		);
@@ -119,14 +120,9 @@ EOF;
 
 			$code .= <<<EOF
 }
-EOF;
-
-			if ($class->inNamespace()) {
-				$code .= <<<EOF
 
 }
 EOF;
-			}
 
 			eval($code);
 		}

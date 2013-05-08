@@ -6,6 +6,10 @@ use RemoteObjects\RemoteObject;
 
 class RemoteObjectProxy implements RemoteObject
 {
+	const NS_SEPARATOR = '__WS__';
+
+	const NS_SEPARATOR_LENGTH = 6;
+
 	/**
 	 * @var \RemoteObjects\Client
 	 */
