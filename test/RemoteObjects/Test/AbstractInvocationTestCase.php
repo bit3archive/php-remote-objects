@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the RemoteObjects library.
+ *
+ * (c) Tristan Lins <tristan.lins@bit3.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace RemoteObjects\Test;
 
 use Monolog\Logger;
@@ -12,6 +21,13 @@ use RemoteObjects\Server;
 use RemoteObjects\Client;
 use RemoteObjects\RemoteObject;
 
+/**
+ * Class AbstractInvocationTestCase
+ *
+ * @author Tristan Lins <tristan.lins@bit3.de>
+ * @package RemoteObjects\Test
+ * @api
+ */
 abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 {
 	protected function getLogger($name)
