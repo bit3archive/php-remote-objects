@@ -1,7 +1,7 @@
 Remote object method invocation framework
 =========================================
 
-[![Build Status](https://travis-ci.org/bit3/php-RemoteObjects.png?branch=master)](https://travis-ci.org/bit3/php-RemoteObjects)
+[![Build Status](https://travis-ci.org/bit3/php-remote-objects.png?branch=master)](https://travis-ci.org/bit3/php-remote-objects)
 
 Com'on, not another method invocation framework?
 Aren't there enough XML-RPC, JSON-RPC and similar implementations out there?
