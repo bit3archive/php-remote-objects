@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: http://bit3.github.io/php-remote-objects/sitemap.xml

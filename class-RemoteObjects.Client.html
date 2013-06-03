@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
+
+	<title>Class RemoteObjects\Client | bit3/php-remote-objects</title>
+
+	<script type="text/javascript" src="resources/combined.js?3245353428"></script>
+	<script type="text/javascript" src="elementlist.js?2777668281"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3505392360" />
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li class="active"><a href="namespace-RemoteObjects.html">RemoteObjects<span></span></a>
+						<ul>
+				<li><a href="namespace-RemoteObjects.Encode.html">Encode</a>
+						</li>
+				<li><a href="namespace-RemoteObjects.Proxy.html">Proxy</a>
+						</li>
+				<li><a href="namespace-RemoteObjects.Test.html">Test</a>
+						</li>
+				<li><a href="namespace-RemoteObjects.Transport.html">Transport</a>
+						</li>
+							</ul></li>
+			</ul>
+		</div>
+
+		<hr />
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li class="active"><a href="class-RemoteObjects.Client.html">Client</a></li>
+				<li><a href="class-RemoteObjects.Server.html">Server</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-RemoteObjects.RemoteObject.html">RemoteObject</a></li>
+			</ul>
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-RemoteObjects.html" title="Summary of RemoteObjects"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+			<li>
+				<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+			</li>
+			<li>
+				<a href="todo.html" title="Todo list"><span>Todo</span></a>
+			</li>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class Client</h1>
+
+
+	<div class="description">
+	
+<p>Class Client</p>
+
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-RemoteObjects.html">RemoteObjects</a><br />
+		<b>Package:</b> RemoteObjects<br />
+
+				<b>Author:</b>
+				Tristan Lins &lt;<a
+href="mailto:tristan.lins&#64;bit3.de">tristan.lins&#64;<!---->bit3.de</a>&gt;<br />
+				<b>Api</b>
+				<br />
+		<b>Located at</b> <a href="source-class-RemoteObjects.Client.html#17-234" title="Go to source code">src/RemoteObjects/Client.php</a><br />
+	</div>
+
+
+
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#47-55" title="Go to source code">__construct</a>( <span><code><a href="class-RemoteObjects.Transport.Client.html">RemoteObjects\Transport\Client</a></code> <var>$transport</var></span>, <span><code><a href="class-RemoteObjects.Encode.Encoder.html">RemoteObjects\Encode\Encoder</a></code> <var>$encoder</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$transport</var></dt>
+					<dd><code>string</code><br>$endpoint</dd>
+					<dt><var>$encoder</var></dt>
+					<dd><code><code><a href="class-RemoteObjects.Transport.Client.html">RemoteObjects\Transport\Client</a></code></code><br>$transport</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setLogger" id="_setLogger">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setLogger">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#57-64" title="Go to source code">setLogger</a>( <span>Monolog\Logger <var>$logger</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$logger</var></dt>
+					<dd><code>Monolog\Logger</code><br>$logger</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getLogger" id="_getLogger">
+
+		<td class="attributes"><code>
+			 public 
+			Monolog\Logger
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getLogger">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#66-72" title="Go to source code">getLogger</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>Monolog\Logger</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setTransport" id="_setTransport">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setTransport">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#74-81" title="Go to source code">setTransport</a>( <span><code><a href="class-RemoteObjects.Transport.Client.html">RemoteObjects\Transport\Client</a></code> <var>$transport</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$transport</var></dt>
+					<dd><code><code><a href="class-RemoteObjects.Transport.Client.html">RemoteObjects\Transport\Client</a></code></code><br>$transport</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getTransport" id="_getTransport">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-RemoteObjects.Transport.Client.html">RemoteObjects\Transport\Client</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getTransport">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#83-89" title="Go to source code">getTransport</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-RemoteObjects.Transport.Client.html">RemoteObjects\Transport\Client</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="setEncoder" id="_setEncoder">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_setEncoder">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#91-98" title="Go to source code">setEncoder</a>( <span><code><a href="class-RemoteObjects.Encode.Encoder.html">RemoteObjects\Encode\Encoder</a></code> <var>$encoder</var></span> )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$encoder</var></dt>
+					<dd><code><code><a href="class-RemoteObjects.Encode.Encoder.html">RemoteObjects\Encode\Encoder</a></code></code><br>$encoder</dd>
+				</dl></div>
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getEncoder" id="_getEncoder">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-RemoteObjects.Encode.Encoder.html">RemoteObjects\Encode\Encoder</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getEncoder">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#100-106" title="Go to source code">getEncoder</a>( )</code>
+
+		<div class="description short">
+			
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-RemoteObjects.Encode.Encoder.html">RemoteObjects\Encode\Encoder</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="castAsRemoteObject" id="_castAsRemoteObject">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-RemoteObjects.RemoteObject.html">RemoteObjects\RemoteObject</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_castAsRemoteObject">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#108-118" title="Go to source code">castAsRemoteObject</a>( <span>string|null <var>$interface</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Cast the client directly into an object object.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Cast the client directly into an object object.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$interface</var></dt>
+					<dd><code>string|null</code><br>$interface</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-RemoteObjects.RemoteObject.html">RemoteObjects\RemoteObject</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="getRemoteObject" id="_getRemoteObject">
+
+		<td class="attributes"><code>
+			 public 
+			<code><a href="class-RemoteObjects.RemoteObject.html">RemoteObjects\RemoteObject</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_getRemoteObject">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#120-161" title="Go to source code">getRemoteObject</a>( <span>string <var>$key</var></span>, <span>string|null <var>$interface</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Get a named remote object proxy.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Get a named remote object proxy.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$key</var></dt>
+					<dd><code>string</code><br>$key</dd>
+					<dt><var>$interface</var></dt>
+					<dd><code>string|null</code><br>$interface</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-RemoteObjects.RemoteObject.html">RemoteObjects\RemoteObject</a></code></code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="invoke" id="_invoke">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_invoke">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#163-177" title="Go to source code">invoke</a>( <span>string <var>$method</var></span>, <span>mixed <var>$_</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			
+<p>Invoke a remote method.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Invoke a remote method.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$method</var></dt>
+					<dd><code>string</code><br>$method The method name.</dd>
+					<dt><var>$_</var></dt>
+					<dd><code>mixed</code><br>$_ List of method parameters.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="invokeArgs" id="_invokeArgs">
+
+		<td class="attributes"><code>
+			 public 
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_invokeArgs">#</a>
+		<code><a href="source-class-RemoteObjects.Client.html#179-233" title="Go to source code">invokeArgs</a>( <span>string <var>$method</var></span>, <span>array <var>$params</var></span> )</code>
+
+		<div class="description short">
+			
+<p>Invoke a remote method.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+<p>Invoke a remote method.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$method</var></dt>
+					<dd><code>string</code><br>$method The method name.</dd>
+					<dt><var>$params</var></dt>
+					<dd><code>array</code><br>$params List of method parameters.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>mixed</code><br />
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+	<table class="summary" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="logger" id="$logger">
+		<td class="attributes"><code>
+			protected  
+			Monolog\Logger
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-RemoteObjects.Client.html#26-31" title="Go to source code"><var>$logger</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$logger" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>The logger facility.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>The logger facility.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="transport" id="$transport">
+		<td class="attributes"><code>
+			protected  
+			<code><a href="class-RemoteObjects.Transport.Client.html">RemoteObjects\Transport\Client</a></code>
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-RemoteObjects.Client.html#33-38" title="Go to source code"><var>$transport</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$transport" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>The transport way.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>The transport way.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="encoder" id="$encoder">
+		<td class="attributes"><code>
+			protected  
+			<code><a href="class-RemoteObjects.Encode.Encoder.html">RemoteObjects\Encode\Encoder</a></code>
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-RemoteObjects.Client.html#40-45" title="Go to source code"><var>$encoder</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$encoder" class="anchor">#</a>
+
+			<div class="description short">
+				
+<p>The data encoder.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				
+<p>The data encoder.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		bit3/php-remote-objects API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
+	</div>
+</div>
+</div>
+</body>
+</html>

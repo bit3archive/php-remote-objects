@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/index.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/namespace-RemoteObjects.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/namespace-RemoteObjects.Encode.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/namespace-RemoteObjects.Proxy.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/namespace-RemoteObjects.Test.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/namespace-RemoteObjects.Transport.html</loc>
+</url>
+
+
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Client.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Encode.AesEncoder.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Encode.CryptEncoder.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Encode.JsonRpc20Encoder.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Encode.LoggingEncoder.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Encode.RsaEncoder.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Proxy.RemoteObjectProxy.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Proxy.RemoteObjectProxyGenerator.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Server.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Test.AbstractInvocationTestCase.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Test.EchoObject.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Test.UnixSocketTest.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Test.UnixSocketTestServer.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Transport.CurlClient.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Transport.HttpServer.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Transport.UnixSocket.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Transport.UnixSocketClient.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Transport.UnixSocketServer.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Encode.Encoder.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.RemoteObject.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Test.EchoInterface.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Transport.Client.html</loc>
+</url>
+<url>
+	<loc>http://bit3.github.io/php-remote-objects/class-RemoteObjects.Transport.Server.html</loc>
+</url>
+</urlset>
