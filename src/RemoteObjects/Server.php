@@ -237,7 +237,8 @@ class Server
 						}
 					}
 
-					$getterName = 'get' . implode('', array_map('ucfirst', explode('_', $property)));
+					$getterName = 'get';
+					$getterName .= implode('', array_map('ucfirst', explode('_', $propertyName)));
 					if ($class->hasMethod($getterName)) {
 						$getter = $class->getMethod($getterName);
 						if ($getter->isPublic()) {
