@@ -1,39 +1,39 @@
 {
-	"name":"bit3/remote-objects",
-	"description":"Remote object method invokation framework",
-	"keywords":["rpc","json-rpc","xml-rpc","json","api","remote","method","encryption","rsa","aes"],
-	"homepage":"https://github.com/bit3/php-RemoteObjects",
-	"license":"MIT",
-	"authors":[
+	"name": "bit3/remote-objects",
+	"description": "Remote object method invokation framework",
+	"keywords": ["rpc", "json-rpc", "xml-rpc", "json", "api", "remote", "method", "encryption", "rsa", "aes"],
+	"homepage": "https://github.com/bit3/php-RemoteObjects",
+	"license": "MIT",
+	"authors": [
 		{
-			"name":"Tristan Lins",
-			"email":"tristan.lins@bit.de",
-			"homepage":"http://bit3.de",
-			"role":"Developer"
+			"name": "Tristan Lins",
+			"email": "tristan.lins@bit.de",
+			"homepage": "http://bit3.de",
+			"role": "Developer"
 		}
 	],
 	"support": {
-		"email":"info@bit3.de",
-		"issues":"https://github.com/bit3/php-RemoteObjects/issues",
-		"wiki":"https://github.com/bit3/php-RemoteObjects/wiki",
-		"source":"https://github.com/bit3/php-RemoteObjects"
+		"email": "info@bit3.de",
+		"issues": "https://github.com/bit3/php-RemoteObjects/issues",
+		"wiki": "https://github.com/bit3/php-RemoteObjects/wiki",
+		"source": "https://github.com/bit3/php-RemoteObjects"
 	},
 	"require": {
 		"psr/log": "~1"
 	},
 	"require-dev": {
-		"phpunit/phpunit":"~3",
-		"monolog/monolog":"~1.3",
+		"phpunit/phpunit": "~3",
+		"monolog/monolog": "~1.3",
 		"phpseclib/phpseclib": "*"
 	},
 	"suggest": {
-		"phpseclib/phpseclib":"Required for encrypted transport.",
-		"monolog/monolog":"Required for logging."
+		"phpseclib/phpseclib": "Required for encrypted transport.",
+		"monolog/monolog": "Required for logging."
 	},
-	"autoload":{
-		"psr-0":{
-			"RemoteObjects":"src",
-			"RemoteObjects\\Test":"test"
+	"autoload": {
+		"psr-0": {
+			"RemoteObjects": "src",
+			"RemoteObjects\\Test": "test"
 		}
 	},
 	"extra": {
