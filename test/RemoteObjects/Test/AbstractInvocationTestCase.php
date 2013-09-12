@@ -131,7 +131,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug(
+			$logger->debug(
 				sprintf(
 					'--- InvocationTestCase::testInvoke(%s, %s) ---',
 					get_class($serverEncoder),
@@ -149,7 +149,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
-			$logger->addError($e->getMessage());
+			$logger->error($e->getMessage());
 
 			if (isset($client)) {
 				try {
@@ -183,7 +183,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug(
+			$logger->debug(
 				sprintf(
 					'--- InvocationTestCase::testInvalidMethod(%s, %s) ---',
 					get_class($serverEncoder),
@@ -201,7 +201,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
-			$logger->addError($e->getMessage());
+			$logger->error($e->getMessage());
 
 			if (isset($client)) {
 				try {
@@ -234,7 +234,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug(
+			$logger->debug(
 				sprintf(
 					'--- InvocationTestCase::testClientCast(%s, %s, %s) ---',
 					$remoteObjectType ? $remoteObjectType : 'null',
@@ -266,7 +266,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
-			$logger->addError($e->getMessage());
+			$logger->error($e->getMessage());
 
 			if (isset($client)) {
 				try {
@@ -299,7 +299,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug(
+			$logger->debug(
 				sprintf(
 					'--- InvocationTestCase::testNamedRemote(%s, %s, %s) ---',
 					$remoteObjectType ? $remoteObjectType : 'null',
@@ -348,7 +348,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
-			$logger->addError($e->getMessage());
+			$logger->error($e->getMessage());
 
 			if (isset($client)) {
 				try {
@@ -381,7 +381,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 		$clientLogger = $this->getLogger('client');
 
 		try {
-			$logger->addDebug(
+			$logger->debug(
 				sprintf(
 					'--- InvocationTestCase::testChaining(%s, %s) ---',
 					get_class($serverEncoder),
@@ -429,7 +429,7 @@ abstract class AbstractInvocationTestCase extends \PHPUnit_Framework_TestCase
 			$this->shutdownServer($server);
 		}
 		catch (\Exception $e) {
-			$logger->addError($e->getMessage());
+			$logger->error($e->getMessage());
 
 			if (isset($client)) {
 				try {

@@ -11,6 +11,9 @@
 
 namespace RemoteObjects;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class Server
  *
@@ -18,12 +21,12 @@ namespace RemoteObjects;
  * @package RemoteObjects
  * @api
  */
-class Server
+class Server implements LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
 	 *
-	 * @var \Monolog\Logger
+	 * @var LoggerInterface
 	 */
 	protected $logger;
 
@@ -63,16 +66,16 @@ class Server
 	}
 
 	/**
-	 * @param \Monolog\Logger $logger
+	 * @param LoggerInterface $logger
 	 */
-	public function setLogger($logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->logger = $logger;
 		return $this;
 	}
 
 	/**
-	 * @return \Monolog\Logger
+	 * @return LoggerInterface
 	 */
 	public function getLogger()
 	{
@@ -146,11 +149,8 @@ class Server
 				$result = null;
 			}
 			else {
-				if (
-					$this->logger !== null &&
-					$this->logger->isHandling(\Monolog\Logger::DEBUG)
-				) {
-					$this->logger->addDebug(
+				if ($this->logger !== null) {
+					$this->logger->debug(
 						'Receive remote method invocation',
 						array(
 							 'method' => $method,
@@ -258,11 +258,8 @@ class Server
 			if ($class->hasMethod($methodName)) {
 				$method = $class->getMethod($methodName);
 				if ($method->isPublic()) {
-					if (
-						$this->logger !== null &&
-						$this->logger->isHandling(\Monolog\Logger::DEBUG)
-					) {
-						$this->logger->addDebug(
+					if ($this->logger !== null) {
+						$this->logger->debug(
 							'Invoke method from remote',
 							array(
 								 'class' => get_class($targetObject),
@@ -277,11 +274,8 @@ class Server
 			}
 		}
 
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(\Monolog\Logger::DEBUG)
-		) {
-			$this->logger->addError(
+		if ($this->logger !== null) {
+			$this->logger->error(
 				'Could not invoke method, because method not exists or not accessible',
 				array(
 					 'class' => get_class($targetObject),

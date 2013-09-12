@@ -11,7 +11,8 @@
 
 namespace RemoteObjects\Transport;
 
-use Monolog\Logger;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class HttpServer
@@ -20,12 +21,12 @@ use Monolog\Logger;
  * @package RemoteObjects\Transport
  * @api
  */
-class HttpServer implements Server
+class HttpServer implements Server, LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
 	 *
-	 * @var \Monolog\Logger
+	 * @var LoggerInterface
 	 */
 	protected $logger;
 
@@ -37,16 +38,16 @@ class HttpServer implements Server
 	}
 
 	/**
-	 * @param \Monolog\Logger $logger
+	 * @param LoggerInterface $logger
 	 */
-	public function setLogger(Logger $logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->logger = $logger;
 		return $this;
 	}
 
 	/**
-	 * @return \Monolog\Logger
+	 * @return LoggerInterface
 	 */
 	public function getLogger()
 	{
@@ -62,11 +63,8 @@ class HttpServer implements Server
 	{
 		$input = file_get_contents('php://input');
 
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(Logger::DEBUG)
-		) {
-			$this->logger->addDebug(
+		if ($this->logger !== null) {
+			$this->logger->debug(
 				'Receive request',
 				array(
 					 'request' => ctype_print($input) ? $input : 'base64:' . base64_encode($input)
@@ -85,11 +83,8 @@ class HttpServer implements Server
 	 */
 	public function respond($response)
 	{
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(Logger::DEBUG)
-		) {
-			$this->logger->addDebug(
+		if ($this->logger !== null) {
+			$this->logger->debug(
 				'Send response',
 				array(
 					 'content-type' => $this->contentType,

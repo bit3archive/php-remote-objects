@@ -11,7 +11,8 @@
 
 namespace RemoteObjects\Transport;
 
-use Monolog\Logger;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class UnixSocket
@@ -20,12 +21,12 @@ use Monolog\Logger;
  * @package RemoteObjects\Transport
  * @api
  */
-abstract class UnixSocket
+abstract class UnixSocket implements LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
 	 *
-	 * @var \Monolog\Logger
+	 * @var LoggerInterface
 	 */
 	protected $logger;
 
@@ -54,16 +55,16 @@ abstract class UnixSocket
 	}
 
 	/**
-	 * @param \Monolog\Logger $logger
+	 * @param LoggerInterface $logger
 	 */
-	public function setLogger(Logger $logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->logger = $logger;
 		return $this;
 	}
 
 	/**
-	 * @return \Monolog\Logger
+	 * @return LoggerInterface
 	 */
 	public function getLogger()
 	{
@@ -73,11 +74,8 @@ abstract class UnixSocket
 	protected function getSocket()
 	{
 		if ($this->socket === null) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::DEBUG)
-			) {
-				$this->logger->addDebug(
+			if ($this->logger !== null) {
+				$this->logger->debug(
 					'Create new socket',
 					array(
 						 'socketPath' => $this->socketPath
@@ -104,11 +102,8 @@ abstract class UnixSocket
 	public function close()
 	{
 		if ($this->socket !== null) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::DEBUG)
-			) {
-				$this->logger->addDebug(
+			if ($this->logger !== null) {
+				$this->logger->debug(
 					'Close socket',
 					array(
 						 'socketPath' => $this->socketPath
@@ -124,11 +119,8 @@ abstract class UnixSocket
 
 	protected function socketSend($socket, $message)
 	{
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(Logger::DEBUG)
-		) {
-			$this->logger->addDebug(
+		if ($this->logger !== null) {
+			$this->logger->debug(
 				'Send message to socket',
 				array(
 					 'socketPath'       => $this->socketPath,
@@ -141,11 +133,8 @@ abstract class UnixSocket
 		$sent = socket_sendto($socket, $message, strlen($message), 0, $this->targetSocketPath);
 
 		if ($sent == -1) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::ERROR)
-			) {
-				$this->logger->addError(
+			if ($this->logger !== null) {
+				$this->logger->error(
 					'Could not block socket',
 					array(
 						 'socketPath' => $this->socketPath,
@@ -160,11 +149,8 @@ abstract class UnixSocket
 
 	protected function socketReceive($socket)
 	{
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(Logger::DEBUG)
-		) {
-			$this->logger->addDebug(
+		if ($this->logger !== null) {
+			$this->logger->debug(
 				'Wait for message on socket',
 				array(
 					 'socketPath' => $this->socketPath
@@ -173,11 +159,8 @@ abstract class UnixSocket
 		}
 
 		if (!socket_set_block($socket)) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::ERROR)
-			) {
-				$this->logger->addError(
+			if ($this->logger !== null) {
+				$this->logger->error(
 					'Could not block socket',
 					array(
 						 'socketPath' => $this->socketPath,
@@ -195,11 +178,8 @@ abstract class UnixSocket
 		$received = socket_recvfrom($this->socket, $buffer, 65536, 0, $from);
 
 		if (-1 == $received) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::ERROR)
-			) {
-				$this->logger->addError(
+			if ($this->logger !== null) {
+				$this->logger->error(
 					'Could not receive data from socket',
 					array(
 						 'socketPath' => $this->socketPath,
@@ -214,11 +194,8 @@ abstract class UnixSocket
 		}
 
 		if (!socket_set_nonblock($socket)) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::ERROR)
-			) {
-				$this->logger->addError(
+			if ($this->logger !== null) {
+				$this->logger->error(
 					'Could not unblock socket',
 					array(
 						 'socketPath' => $this->socketPath,
@@ -232,11 +209,8 @@ abstract class UnixSocket
 
 		$this->targetSocketPath = $from;
 
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(Logger::DEBUG)
-		) {
-			$this->logger->addDebug(
+		if ($this->logger !== null) {
+			$this->logger->debug(
 				'Received message on socket',
 				array(
 					 'socketPath'       => $this->socketPath,

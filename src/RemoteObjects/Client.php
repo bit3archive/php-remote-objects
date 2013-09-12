@@ -11,6 +11,8 @@
 
 namespace RemoteObjects;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use RemoteObjects\Proxy\RemoteObjectProxy;
 use RemoteObjects\Proxy\RemoteObjectProxyGenerator;
 
@@ -21,12 +23,12 @@ use RemoteObjects\Proxy\RemoteObjectProxyGenerator;
  * @package RemoteObjects
  * @api
  */
-class Client
+class Client implements LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
 	 *
-	 * @var \Monolog\Logger
+	 * @var LoggerInterface
 	 */
 	protected $logger;
 
@@ -55,16 +57,16 @@ class Client
 	}
 
 	/**
-	 * @param \Monolog\Logger $logger
+	 * @param LoggerInterface $logger
 	 */
-	public function setLogger($logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->logger = $logger;
 		return $this;
 	}
 
 	/**
-	 * @return \Monolog\Logger
+	 * @return LoggerInterface
 	 */
 	public function getLogger()
 	{
@@ -128,11 +130,8 @@ class Client
 	public function getRemoteObject($key, $interface = null)
 	{
 		if ($interface) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(\Monolog\Logger::DEBUG)
-			) {
-				$this->logger->addDebug(
+			if ($this->logger !== null) {
+				$this->logger->debug(
 					'Create new virtual remote object proxy',
 					array(
 						 'interface' => $interface,
@@ -144,11 +143,8 @@ class Client
 			return RemoteObjectProxyGenerator::generate($this, $interface, $key);
 		}
 		else {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(\Monolog\Logger::DEBUG)
-			) {
-				$this->logger->addDebug(
+			if ($this->logger !== null) {
+				$this->logger->debug(
 					'Get remote object proxy',
 					array(
 						 'path' => $key
@@ -186,10 +182,7 @@ class Client
 	 */
 	public function invokeArgs($method, array $params)
 	{
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(\Monolog\Logger::DEBUG)
-		) {
+		if ($this->logger !== null) {
 			$methodSynopsis = $method . '(';
 			foreach (array_values($params) as $index => $param) {
 				if ($index > 0) {
@@ -199,7 +192,7 @@ class Client
 			}
 			$methodSynopsis .= ')';
 
-			$this->logger->addDebug(
+			$this->logger->debug(
 				'Invoke remote object method ' . $methodSynopsis,
 				array(
 					 'transport' => $this->transport,
@@ -215,11 +208,8 @@ class Client
 
 		$result = $this->encoder->decodeResult($response);
 
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(\Monolog\Logger::DEBUG)
-		) {
-			$this->logger->addDebug(
+		if ($this->logger !== null) {
+			$this->logger->debug(
 				'Receive methods ' . $methodSynopsis . ' result.',
 				array(
 					 'transport' => $this->transport,

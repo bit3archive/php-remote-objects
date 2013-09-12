@@ -11,6 +11,9 @@
 
 namespace RemoteObjects\Encode;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class LoggingEncoder
  *
@@ -18,26 +21,26 @@ namespace RemoteObjects\Encode;
  * @package RemoteObjects\Encode
  * @api
  */
-abstract class LoggingEncoder implements Encoder
+abstract class LoggingEncoder implements Encoder, LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
 	 *
-	 * @var \Monolog\Logger
+	 * @var LoggerInterface
 	 */
 	protected $logger;
 
 	/**
-	 * @param \Monolog\Logger $logger
+	 * @param LoggerInterface $logger
 	 */
-	public function setLogger($logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->logger = $logger;
 		return $this;
 	}
 
 	/**
-	 * @return \Monolog\Logger
+	 * @return LoggerInterface
 	 */
 	public function getLogger()
 	{

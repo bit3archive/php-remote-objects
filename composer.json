@@ -18,6 +18,9 @@
 		"wiki":"https://github.com/bit3/php-RemoteObjects/wiki",
 		"source":"https://github.com/bit3/php-RemoteObjects"
 	},
+	"require": {
+		"psr/log": "~1"
+	},
 	"require-dev": {
 		"phpunit/phpunit":"~3",
 		"monolog/monolog":"~1.3",

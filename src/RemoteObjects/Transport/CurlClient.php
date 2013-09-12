@@ -11,7 +11,8 @@
 
 namespace RemoteObjects\Transport;
 
-use \Monolog\Logger;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CurlClient
@@ -20,12 +21,12 @@ use \Monolog\Logger;
  * @package RemoteObjects\Transport
  * @api
  */
-class CurlClient implements Client
+class CurlClient implements Client, LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
 	 *
-	 * @var \Monolog\Logger
+	 * @var LoggerInterface
 	 */
 	protected $logger;
 
@@ -61,16 +62,16 @@ class CurlClient implements Client
 	}
 
 	/**
-	 * @param \Monolog\Logger $logger
+	 * @param LoggerInterface $logger
 	 */
-	public function setLogger(Logger $logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->logger = $logger;
 		return $this;
 	}
 
 	/**
-	 * @return \Monolog\Logger
+	 * @return LoggerInterface
 	 */
 	public function getLogger()
 	{
@@ -80,11 +81,8 @@ class CurlClient implements Client
 	protected function getCurl()
 	{
 		if ($this->curl === null) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::DEBUG)
-			) {
-				$this->logger->addDebug(
+			if ($this->logger !== null) {
+				$this->logger->debug(
 					'Creating new curl instance',
 					array(
 						 'endpoint' => $this->url,
@@ -114,11 +112,8 @@ class CurlClient implements Client
 
 	public function request($json)
 	{
-		if (
-			$this->logger !== null &&
-			$this->logger->isHandling(Logger::DEBUG)
-		) {
-			$this->logger->addDebug(
+		if ($this->logger !== null) {
+			$this->logger->debug(
 				'Do curl request',
 				array(
 					 'endpoint' => $this->url,
@@ -150,11 +145,8 @@ class CurlClient implements Client
 		fclose($responseStream);
 
 		if (!$success) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::ERROR)
-			) {
-				$this->logger->addError(
+			if ($this->logger !== null) {
+				$this->logger->error(
 					'Requesting ' . $this->url . ' failed with ' . curl_error($curl),
 					array(
 						 'endpoint' => $this->url,
@@ -174,11 +166,8 @@ class CurlClient implements Client
 
 		// if request not success...
 		if ($httpCode != 200) {
-			if (
-				$this->logger !== null &&
-				$this->logger->isHandling(Logger::ERROR)
-			) {
-				$this->logger->addError(
+			if ($this->logger !== null) {
+				$this->logger->error(
 					'Requesting ' . $this->url . ' failed with HTTP ' . $httpCode,
 					array(
 						 'endpoint' => $this->url,

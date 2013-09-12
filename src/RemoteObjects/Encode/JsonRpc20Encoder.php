@@ -11,6 +11,9 @@
 
 namespace RemoteObjects\Encode;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class JsonRpc20Encoder
  *
@@ -18,12 +21,12 @@ namespace RemoteObjects\Encode;
  * @package RemoteObjects\Encode
  * @api
  */
-class JsonRpc20Encoder implements Encoder
+class JsonRpc20Encoder implements Encoder, LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
 	 *
-	 * @var \Monolog\Logger
+	 * @var LoggerInterface
 	 */
 	protected $logger;
 
@@ -42,16 +45,16 @@ class JsonRpc20Encoder implements Encoder
 	protected $lastDecodeId = null;
 
 	/**
-	 * @param \Monolog\Logger $logger
+	 * @param LoggerInterface $logger
 	 */
-	public function setLogger($logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->logger = $logger;
 		return $this;
 	}
 
 	/**
-	 * @return \Monolog\Logger
+	 * @return LoggerInterface
 	 */
 	public function getLogger()
 	{
