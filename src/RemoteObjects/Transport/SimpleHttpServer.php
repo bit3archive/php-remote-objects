@@ -15,13 +15,13 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class HttpServer
+ * Class SimpleHttpServer
  *
  * @author Tristan Lins <tristan.lins@bit3.de>
  * @package RemoteObjects\Transport
  * @api
  */
-class HttpServer implements Server, LoggerAwareInterface
+class SimpleHttpServer implements Server, LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
