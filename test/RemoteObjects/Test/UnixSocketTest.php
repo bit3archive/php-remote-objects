@@ -17,7 +17,6 @@ use RemoteObjects\Encode\Encoder;
 use Symfony\Component\Process\Process;
 use RemoteObjects\Server;
 use RemoteObjects\Client;
-use RemoteObjects\Encode\JsonRpc20Encoder;
 use RemoteObjects\Transport\UnixSocketClient;
 
 /**

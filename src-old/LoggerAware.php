@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace RemoteObjects\Encode;
+namespace RemoteObjects;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
  * @package RemoteObjects\Encode
  * @api
  */
-abstract class LoggingEncoder implements Encoder, LoggerAwareInterface
+abstract class LoggerAware implements LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
@@ -31,7 +31,7 @@ abstract class LoggingEncoder implements Encoder, LoggerAwareInterface
 	protected $logger;
 
 	/**
-	 * @param LoggerInterface $logger
+	 * {@inheritdoc}
 	 */
 	public function setLogger(LoggerInterface $logger)
 	{
@@ -40,7 +40,9 @@ abstract class LoggingEncoder implements Encoder, LoggerAwareInterface
 	}
 
 	/**
-	 * @return LoggerInterface
+	 * Return the logger facility.
+	 *
+	 * @return LoggerInterface|null
 	 */
 	public function getLogger()
 	{

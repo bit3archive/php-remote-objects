@@ -9,26 +9,27 @@
  * file that was distributed with this source code.
  */
 
-namespace RemoteObjects\Transport;
+namespace RemoteObjects\Encoding;
 
-use RemoteObjects\Internal\EncodedMethodInterface;
+use RemoteObjects\Internal\EncodedException;
+use RemoteObjects\Internal\EncodedMethodResultInterface;
 use RemoteObjects\Internal\MethodInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class Client
+ * Class Encoder
  *
  * @author Tristan Lins <tristan.lins@bit3.de>
- * @package RemoteObjects\Transport
+ * @package RemoteObjects\Encode
  * @api
  */
-interface Client
+interface Encoder
 {
 	/**
-	 * @param Request $request
+	 * Encode input.
 	 *
-	 * @return Response
+	 * @param mixed $input
+	 *
+	 * @return mixed
 	 */
-	public function request(Request $request);
+	public function encode($input);
 }

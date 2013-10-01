@@ -15,7 +15,7 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use RemoteObjects\Encode\AesEncoder;
 use RemoteObjects\Encode\Encoder;
-use RemoteObjects\Encode\JsonRpc20Encoder;
+use RemoteObjects\JsonRpc\JsonRpc20Encoder;
 use RemoteObjects\Encode\RsaEncoder;
 use RemoteObjects\Server;
 use RemoteObjects\Client;

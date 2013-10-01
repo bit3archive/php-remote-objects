@@ -13,6 +13,7 @@ namespace RemoteObjects\Transport;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use RemoteObjects\Internal\EncodedMethodInterface;
 
 /**
  * Class CurlClient
@@ -110,7 +111,7 @@ class CurlClient implements Client, LoggerAwareInterface
 		return $this->curl;
 	}
 
-	public function request($json)
+	public function request(EncodedMethodInterface $encodedMethod)
 	{
 		if ($this->logger !== null) {
 			$this->logger->debug(
@@ -118,7 +119,7 @@ class CurlClient implements Client, LoggerAwareInterface
 				array(
 					 'endpoint' => $this->url,
 					 'headers'  => $this->headers,
-					 'post'     => $json
+					 'post'     => $encodedMethod
 				)
 			);
 		}
@@ -129,7 +130,7 @@ class CurlClient implements Client, LoggerAwareInterface
 		$responseStream = fopen('php://temp', 'w+');
 
 		// set the request body
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $encodedMethod->getEncodedMethod());
 
 		// set the response output file
 		curl_setopt($curl, CURLOPT_FILE, $responseStream);

@@ -9,29 +9,24 @@
  * file that was distributed with this source code.
  */
 
-namespace RemoteObjects\Transport;
+namespace RemoteObjects\Server;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Server
  *
  * @author Tristan Lins <tristan.lins@bit3.de>
- * @package RemoteObjects\Transport
+ * @package RemoteObjects
  * @api
  */
 interface Server
 {
 	/**
-	 * Receive the json request.
+	 * @param Request $request
 	 *
-	 * @return stdClass
+	 * @return Response
 	 */
-	public function receive();
-
-	/**
-	 * Send response.
-	 *
-	 * @param mixed      $result
-	 * @param \Exception $error
-	 */
-	public function respond($response);
+	public function handle(Request $request);
 }

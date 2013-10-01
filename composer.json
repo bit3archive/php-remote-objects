@@ -28,7 +28,9 @@
 	},
 	"suggest": {
 		"phpseclib/phpseclib": "Required for encrypted transport.",
-		"monolog/monolog": "Required for logging."
+		"monolog/monolog": "Can be used for logging.",
+		"symfony/http-foundation": "Required by RoutingHttpServer and RestHttpServer",
+		"symfony/routing": "Required by RoutingHttpServer and RestHttpServer"
 	},
 	"autoload": {
 		"psr-0": {

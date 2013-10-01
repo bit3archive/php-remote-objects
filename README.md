@@ -81,7 +81,7 @@ class RemoteObject
 
 $transport = new RemoteObjects\Transport\UnixSocketServer('/tmp/socket.server');
 
-$encoder = new RemoteObjects\Encode\JsonRpc20Encoder();
+$encoder = new RemoteObjects\JsonRpc\JsonRpc20Encoder();
 
 $target = new RemoteObject();
 
@@ -99,7 +99,7 @@ $server->handle();
 
 $transport = new RemoteObjects\Transport\UnixSocketClient('/tmp/socket.client', '/tmp/socket.server');
 
-$encoder = new RemoteObjects\Encode\JsonRpc20Encoder();
+$encoder = new RemoteObjects\JsonRpc\JsonRpc20Encoder();
 
 $server = new RemoteObjects\Client(
 	$transport,
@@ -305,7 +305,7 @@ Using the `AesEncoder` or `RsaEncoder`, is really simple.
 
 Server and client:
 ```php
-$jsonEncoder = new RemoteObjects\Encode\JsonRpc20Encoder();
+$jsonEncoder = new RemoteObjects\JsonRpc\JsonRpc20Encoder();
 $encoder = new RemoteObjects\Encode\AesEncoder(
 	$jsonEncoder,
 	'<add your pre-shared key here>'
@@ -316,7 +316,7 @@ $encoder = new RemoteObjects\Encode\AesEncoder(
 
 Server:
 ```php
-$jsonEncoder = new RemoteObjects\Encode\JsonRpc20Encoder();
+$jsonEncoder = new RemoteObjects\JsonRpc\JsonRpc20Encoder();
 $encoder = new RemoteObjects\Encode\RsaEncoder(
 	$jsonEncoder,
 	'<add client public key here>',
@@ -326,7 +326,7 @@ $encoder = new RemoteObjects\Encode\RsaEncoder(
 
 Client:
 ```php
-$jsonEncoder = new RemoteObjects\Encode\JsonRpc20Encoder();
+$jsonEncoder = new RemoteObjects\JsonRpc\JsonRpc20Encoder();
 $encoder = new RemoteObjects\Encode\RsaEncoder(
 	$jsonEncoder,
 	'<add server public key here>',

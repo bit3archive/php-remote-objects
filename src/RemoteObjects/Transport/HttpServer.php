@@ -13,15 +13,17 @@ namespace RemoteObjects\Transport;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SimpleHttpServer
  *
- * @author Tristan Lins <tristan.lins@bit3.de>
+ * @author  Tristan Lins <tristan.lins@bit3.de>
  * @package RemoteObjects\Transport
  * @api
  */
-class SimpleHttpServer implements Server, LoggerAwareInterface
+class HttpServer implements TransportServer, LoggerAwareInterface
 {
 	/**
 	 * The logger facility.
@@ -29,13 +31,6 @@ class SimpleHttpServer implements Server, LoggerAwareInterface
 	 * @var LoggerInterface
 	 */
 	protected $logger;
-
-	protected $contentType;
-
-	function __construct($contentType = 'application/octet-stream')
-	{
-		$this->contentType = $contentType;
-	}
 
 	/**
 	 * @param LoggerInterface $logger
@@ -57,22 +52,22 @@ class SimpleHttpServer implements Server, LoggerAwareInterface
 	/**
 	 * Receive the serialized json request.
 	 *
-	 * @return stdClass
+	 * @return Request
 	 */
 	public function receive()
 	{
-		$input = file_get_contents('php://input');
+		$request = Request::createFromGlobals();
 
 		if ($this->logger !== null) {
 			$this->logger->debug(
 				'Receive request',
 				array(
-					 'request' => ctype_print($input) ? $input : 'base64:' . base64_encode($input)
+					'request' => $request
 				)
 			);
 		}
 
-		return $input;
+		return $request;
 	}
 
 	/**
@@ -81,22 +76,17 @@ class SimpleHttpServer implements Server, LoggerAwareInterface
 	 * @param mixed      $result
 	 * @param \Exception $error
 	 */
-	public function respond($response)
+	public function respond(Response $response)
 	{
 		if ($this->logger !== null) {
 			$this->logger->debug(
 				'Send response',
 				array(
-					 'content-type' => $this->contentType,
-					 'response'     => ctype_print($response) ? $response : 'base64:' . base64_encode($response)
+					'response' => $response
 				)
 			);
 		}
 
-		ob_start();
-		while (ob_end_clean()) {
-		}
-		header('Content-Type: ' . $this->contentType);
-		echo $response;
+		$response->send();
 	}
 }

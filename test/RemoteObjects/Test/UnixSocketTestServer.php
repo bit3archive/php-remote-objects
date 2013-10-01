@@ -15,7 +15,6 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use RemoteObjects\Encode\Encoder;
 use RemoteObjects\Server;
-use RemoteObjects\Encode\JsonRpc20Encoder;
 use RemoteObjects\Transport\UnixSocketServer;
 
 /**

@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace RemoteObjects\Encode;
+namespace RemoteObjects\Encoding;
 
 /**
- * Class AesEncoder
+ * Class AesCoder
  *
  * @author Tristan Lins <tristan.lins@bit3.de>
  * @package RemoteObjects\Encode
  * @api
  */
-class AesEncoder extends CryptEncoder
+class AesCoder implements Encoder, Decoder
 {
 	/**
 	 * @var string
@@ -33,14 +33,10 @@ class AesEncoder extends CryptEncoder
 	protected $aes;
 
 	/**
-	 * @param Encoder $encoder
 	 * @param string $psk The pre-shared key.
-	 * @param bool    $plainExceptions If encryption fails, return a plain unencrypted exception.
-	 *                                 This is only useful on servers and for debugging.
 	 */
-	function __construct(Encoder $encoder, $psk, $plainExceptions = false)
+	function __construct($psk)
 	{
-		parent::__construct($encoder, $plainExceptions);
 		$this->psk = (string) $psk;
 	}
 
@@ -64,7 +60,7 @@ class AesEncoder extends CryptEncoder
 	/**
 	 * Get the crypt aes component.
 	 *
-	 * @return \Crypt_RSA
+	 * @return \Crypt_AES
 	 */
 	protected function getCryptAes()
 	{
@@ -76,7 +72,7 @@ class AesEncoder extends CryptEncoder
 		return $this->aes;
 	}
 
-	public function encrypt($string)
+	public function encode($string)
 	{
 		$aes = $this->getCryptAes();
 
@@ -85,7 +81,7 @@ class AesEncoder extends CryptEncoder
 		return $crypt;
 	}
 
-	public function decrypt($crypt)
+	public function decode($crypt)
 	{
 		$aes = $this->getCryptAes();
 

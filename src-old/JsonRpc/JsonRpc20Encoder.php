@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace RemoteObjects\Encode;
+namespace RemoteObjects\JsonRpc;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;

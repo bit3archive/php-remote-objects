@@ -9,26 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace RemoteObjects\Transport;
+namespace RemoteObjects\Data;
 
-use RemoteObjects\Internal\EncodedMethodInterface;
-use RemoteObjects\Internal\MethodInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class Client
+ * Class DataTransformer
  *
  * @author Tristan Lins <tristan.lins@bit3.de>
- * @package RemoteObjects\Transport
+ * @package RemoteObjects
  * @api
  */
-interface Client
+interface DataTransformerInterface
 {
 	/**
 	 * @param Request $request
+	 * @param mixed $data
 	 *
 	 * @return Response
 	 */
-	public function request(Request $request);
+	public function transform(Request $request, $data);
 }

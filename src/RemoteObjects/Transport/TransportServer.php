@@ -11,24 +11,28 @@
 
 namespace RemoteObjects\Transport;
 
-use RemoteObjects\Internal\EncodedMethodInterface;
-use RemoteObjects\Internal\MethodInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class Client
+ * Class Server
  *
  * @author Tristan Lins <tristan.lins@bit3.de>
  * @package RemoteObjects\Transport
  * @api
  */
-interface Client
+interface TransportServer
 {
 	/**
-	 * @param Request $request
+	 * Handle requests.
 	 *
-	 * @return Response
+	 * @return \Request
 	 */
-	public function request(Request $request);
+	public function receive();
+
+	/**
+	 * @param Response $response
+	 *
+	 * @return mixed
+	 */
+	public function respond(Response $response);
 }
